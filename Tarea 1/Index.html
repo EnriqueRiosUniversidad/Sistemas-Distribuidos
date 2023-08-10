@@ -1,186 +1,216 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>TO-DO LIST</title>
 
     <style>
-        @import url("https://fonts.cdnfonts.com/css/zig");
+      @import url("https://fonts.cdnfonts.com/css/zig");
 
-        /*font-family: 'Zig', sans-serif;*/
-        html {
-            background-color: whitesmoke;
-        }
+      /*font-family: 'Zig', sans-serif;*/
+      html {
+        background-color: whitesmoke;
+      }
+      input{
+        font-family:"Zig", sans-serif;
+        border: 2px solid black;
+        margin: 6px;
+        width: 300px;
+        height: 30px;
+      }
+      textarea{
+        font-family:"Zig", sans-serif;
+        border: 3px solid black;
+        width: 600px;
+        height: 100px;
+        font-size: large;
+        font-style: italic;
+      }
+      button{
+        font-size: large;
+        font-family:"Zig", sans-serif;
 
-        .Cuadros_tareas {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+      }
 
-        .Contenido_CentradoColumna {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      .Cuadros_tareas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 5px;
+      }
 
-        .rectangulo {
-            width: 330px;
-            height: 500px;
-            background-color: aqua;
-            margin: 10px;
-            border: 5px solid black;
-            border-radius: 20px;
-        }
+      .Contenido_CentradoColumna {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        .rectangle-Nuevo {
-            background-color: aquamarine;
-        }
+      .rectangulo {
+        background-color: aqua;
+        margin: 10px;
+        border: 5px solid black;
+        border-radius: 20px;
+      }
 
-        .rectangle-Haciendo {
-            background-color: wheat;
-        }
+      .rectangle-Nuevo {
+        background-color: aquamarine;
+        width: 330px;
+        height: 500px;
+      }
 
-        .rectangle-hecho {
-            background-color: palegreen;
-        }
+      .rectangle-Haciendo {
+        background-color: wheat;
+        width: 330px;
+        height: 500px;
+      }
 
-        .tarea_cuerpo {
-            background-color: crimson;
-            width: 280px;
-            height: 50px;
-            padding: 6px;
-            font-family: "Zig", sans-serif;
-        }
+      .rectangle-hecho {
+        background-color: palegreen;
+        width: 330px;
+        height: 500px;
+      }
 
-        .tarea_titulo {
-            font-size: large;
-        }
+      .tarea_cuerpo {
+        background-color: crimson;
+        width: 280px;
+        height: 100px;
+        padding: 2px;
+        font-family: "Zig", sans-serif;
+      }
 
-        .tarea_Descripcion {
-            font-size: medium;
-        }
+      .tarea_titulo {
+        font-size: large;
+      }
 
-        .div-header {
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: x-large;
-            font-family: "Zig", sans-serif;
-        }
+      .tarea_Descripcion {
+        font-size: medium;
+      }
+
+      .div-header {
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: x-large;
+        font-family: "Zig", sans-serif;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="Contenido_CentradoColumna">
-        <input type="text" id="tarea_titulo" / placeholder="Titulo">
-        <textarea id="tarea_descripcion" placeholder="Descripcion...."></textarea>
-        <input type="date" id="tarea_fecha" />
-        <button id="crearTarea">Crear Tarea</button>
+      <input type="text" id="tarea_titulo" / placeholder="Titulo">
+      <textarea id="tarea_descripcion" placeholder="Descripcion...."></textarea>
+      <input type="date" id="tarea_fecha" />
+      <button id="crearTarea">Crear Tarea</button>
     </div>
 
     <div class="Cuadros_tareas">
-        <div class="rectangulo rectangle-Nuevo Contenido_CentradoColumna" id="rectangulo_Nuevo">
-            <div class="div-header">NUEVO</div>
-        </div>
-        <div class="rectangulo rectangle-Haciendo" id="rectangulo_Haciendo">
-            <div class="div-header Contenido_CentradoColumna">HACIENDO</div>
-        </div>
-        <div class="rectangulo rectangle-hecho" id="rectangulo_Hecho">
-            <div class="div-header Contenido_CentradoColumna">HECHO</div>
-        </div>
+      <div
+        class="rectangulo rectangle-Nuevo Contenido_CentradoColumna"
+        id="rectangulo_Nuevo"
+      >
+        <div class="div-header">NUEVO</div>
+      </div>
+      <div class="rectangulo rectangle-Haciendo" id="rectangulo_Haciendo">
+        <div class="div-header Contenido_CentradoColumna">HACIENDO</div>
+      </div>
+      <div class="rectangulo rectangle-hecho" id="rectangulo_Hecho">
+        <div class="div-header Contenido_CentradoColumna">HECHO</div>
+      </div>
     </div>
-</body>
+  </body>
 
-<script>
+  <script>
     let contador = 1;
     const contenedor_nuevo = document.getElementById("rectangulo_Nuevo");
     const contenedor_Haciendo = document.getElementById("rectangulo_Haciendo");
     const contenedor_Hecho = document.getElementById("rectangulo_Hecho");
     document.getElementById("crearTarea").addEventListener("click", () => {
-        const tarea_Titulo = document.getElementById("tarea_titulo").value;
-        if (tarea_Titulo.trim() === "") {
-            //Esta vacio el texto
-            return;
-        }
-        const tarea = document.createElement("div");
-        tarea.classList.add("tarea_cuerpo");
-        tarea.classList.add("Contenido_CentradoColumna");
-        tarea.classList.add("rectangulo");
-        tarea.draggable = true;
-        tarea.textContent = `Tarea ${contador} ${tarea_Titulo}`;
-        tarea.id = `tarea${contador}`;
-        //Le doy la propiedad para poder transferir sus ids
-        tarea.addEventListener("dragstart", (e) => {
-            e.dataTransfer.setData("text/plain", tarea.id);
-        });
+      //Optenemos el texto que ira en la tarea
+      const tarea_Titulo = document.getElementById("tarea_titulo").value;
+      if (tarea_Titulo.trim() === "") {
+        //Esta vacio el texto
 
-        //Cargamos el contenido en cada tarea.
-        //Codigo experimental comienza aqui
-        const tarea_Descripcion =
-            document.getElementById("tarea_descripcion").value;
-        const tarea_Fecha = document.getElementById("tarea_fecha").value;
-        const t_t = document.createElement("p");
-        t_t.classList.add("tarea_titulo");
-        t_t.textContent = tarea_Titulo;
-        t_t.id = `t_Titulo${contador}`;
-        const t_d = document.createElement("p");
-        t_d.classList.add("tarea_Descripcion");
-        t_d.textContent = tarea_Descripcion;
-        t_d.id = `t_Descripcion${contador}`;
-        const t_f = document.createElement("p");
-        t_f.textContent = tarea_Fecha;
-        t_f.id = `t_Fecha${contador}`;
-        tarea.appendChild(t_t);
-        tarea.appendChild(t_d);
-        tarea.appendChild(t_f);
-        //termina el codigo experimental.
+        return;
+      }
+      const tarea_Descripcion =
+        document.getElementById("tarea_descripcion").value;
+      const tarea_Fecha = document.getElementById("tarea_fecha").value;
+      //----Terminamos de leer datos del DOM
 
-        contenedor_nuevo.appendChild(tarea);
-        contador++;
+      //Propiedades y clases de la tarea
+      const tarea = document.createElement("div");
+      tarea.classList.add("rectangulo");
+      tarea.classList.add("tarea_cuerpo");
+      tarea.classList.add("Contenido_CentradoColumna");
+      tarea.draggable = true;
+      //tarea.textContent = `Tarea ${contador} ${tarea_Titulo}`;
+      tarea.id = `tarea${contador}`;
+      //Le doy la propiedad para poder transferir sus ids
+      tarea.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", tarea.id);
+      });
+      //--------Terminamos de cargar.
+
+      //Cargamos el contenido en cada tarea.
+      const t_t = document.createElement("h1");
+      t_t.classList.add("tarea_titulo");
+      t_t.textContent = tarea_Titulo;
+      t_t.id = `t_Titulo${contador}`;
+      const t_d = document.createElement("i");
+      t_d.classList.add("tarea_Descripcion");
+      t_d.textContent = tarea_Descripcion;
+      t_d.id = `t_Descripcion${contador}`;
+      const t_f = document.createElement("b");
+      t_f.textContent = tarea_Fecha;
+      t_f.id = `t_Fecha${contador}`;
+      tarea.appendChild(t_t);
+      tarea.appendChild(t_d);
+      tarea.appendChild(t_f);
+      //---------- Contenido cargado
+
+      contenedor_nuevo.appendChild(tarea);
+      contador++;
     });
 
     //Codigo de drag and drop
 
     /*contenedor de Nuevo*/
     contenedor_nuevo.addEventListener("dragover", (e) => {
-        e.preventDefault(); // Permite soltar elementos aquí
+      e.preventDefault(); // Permite soltar elementos aquí
     });
 
     contenedor_nuevo.addEventListener("drop", (e) => {
-        e.preventDefault();
-        //Optiene el  id en formato texto y plano, como
-        //seteamos que el dato a transferir seria el id, es ese el que nos da.
-        const tareaId = e.dataTransfer.getData("text/plain");
-        const tarea = document.getElementById(tareaId);
-        contenedor_nuevo.appendChild(tarea);
+      e.preventDefault();
+      //Optiene el  id en formato texto y plano, como
+      //seteamos que el dato a transferir seria el id, es ese el que nos da.
+      const tareaId = e.dataTransfer.getData("text/plain");
+      const tarea = document.getElementById(tareaId);
+      contenedor_nuevo.appendChild(tarea);
     });
 
     /*contenedor de haciendo*/
     contenedor_Haciendo.addEventListener("dragover", (e) => {
-        e.preventDefault();
+      e.preventDefault();
     });
 
     contenedor_Haciendo.addEventListener("drop", (e) => {
-        e.preventDefault();
-        const tareaId = e.dataTransfer.getData("text/plain");
-        const tarea = document.getElementById(tareaId);
-        contenedor_Haciendo.appendChild(tarea);
+      e.preventDefault();
+      const tareaId = e.dataTransfer.getData("text/plain");
+      const tarea = document.getElementById(tareaId);
+      contenedor_Haciendo.appendChild(tarea);
     });
 
     /*contenedor de hecho*/
     contenedor_Hecho.addEventListener("dragover", (e) => {
-        e.preventDefault();
+      e.preventDefault();
     });
 
     contenedor_Hecho.addEventListener("drop", (e) => {
-        e.preventDefault();
-        const tareaId = e.dataTransfer.getData("text/plain");
-        const tarea = document.getElementById(tareaId);
-        contenedor_Hecho.appendChild(tarea);
+      e.preventDefault();
+      const tareaId = e.dataTransfer.getData("text/plain");
+      const tarea = document.getElementById(tareaId);
+      contenedor_Hecho.appendChild(tarea);
     });
-</script>
-
+  </script>
 </html>
