@@ -1,0 +1,104 @@
+<project name="ProjectoEnrique" default="run" basedir=".">
+    <!-- Vamos creando properties-->
+    <property name="src.dir" value="./src" />
+    <property name="build.dir" value="./build" />
+    <property name="lib.dir" value="./lib" />
+    <property name="dependencia.dir" value="${lib.dir}/commons-io-2.13.0.jar" />
+    <property name="jar.dir" value="./el_JAR.jar" />
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar" />
+        <pathelement location="${dependencia.dir}" />
+    </path>
+
+    <target name="crearCarpetaBuild">
+        <mkdir dir="${build.dir}" />
+    </target>
+
+
+    <target name="compilar" depends="crearCarpetaBuild">
+        <mkdir dir="${build.dir}" />
+        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath"
+            includeantruntime="false" />
+    </target>
+
+    <target name="JAR" depends="compilar">
+        <jar destfile="${jar.dir}" basedir="${build.dir}">
+            <manifest>
+                <attribute name="main-Class" value="main" />
+            </manifest>
+            <fileset dir="${lib.dir}" includes="*.jar" />
+        </jar>
+    </target>
+
+    <target name="run" depends="JAR">
+        <java fork="true" classname="main">
+            <classpath>
+                <path refid="classpath" />
+                <path location="${jar.dir}" />                
+            </classpath>
+
+        </java>
+    </target>
+
+</project>
+
+
+<!-- 
+     <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath"
+
+includeantruntime="false" :La propiedad includeantruntime es una propiedad que se puede establecer
+en el 
+    compilador de Ant (javac) para determinar si se debe incluir o no las bibliotecas de tiempo de
+ejecución 
+    de Ant en el classpath al compilar el código fuente. Por defecto es "true"
+classpathref="classpath"  : La propiedad classpathref se utiliza en la tarea <javac> de Apache Ant
+para 
+    hacer referencia a un classpath definido previamente utilizando el elemento <path>. Esto permite 
+    reutilizar definiciones de classpath en múltiples lugares dentro de tu archivo build.xml.
+
+
+
+   Asumo que esto me incluye todos los archivos en la carpeta
+    que tengan terminacion .jar, podria espesificar
+        peeero, asi es mas: por si acaso
+    
+    <path id="classpath">
+    Esta etiqueta permite seleccionar archivos de acuerdo con ciertos criterios,
+             como patrones de nombres de archivo o ubicaciones de directorios.
+    <fileset dir="directorio_base" includes="patrones" excludes="patrones" />
+    includes: Este atributo permite definir patrones de nombres de archivo 
+        o directorios que deben incluirse en el conjunto.
+
+    excludes: Este atributo permite definir patrones de nombres de archivo 
+        o directorios que deben excluirse del conjunto, incluso si coinciden con 
+        los patrones de inclusión.
+
+        <fileset dir="${lib.dir}" includes="*.jar" />
+    La etiqueta <pathelement> en el archivo de configuración build.xml 
+            de Apache Ant se utiliza para agregar elementos individuales al 
+            classpath durante la compilación o ejecución de tareas. 
+            El classpath es una lista de ubicaciones (directorios o archivos JAR) 
+            donde el sistema busca las clases y recursos necesarios para compilar 
+            o ejecutar un programa.
+        
+        <pathelement location="${dependencia.dir}" />
+    </path>
+
+
+mkdir
+    crea una carpeta con el nombre igual a lo que tiene
+    en la variable build.dir 
+    en este caso creara una carpeta llamada build
+
+
+
+    Con depends decimos que primero llamara a la funcion crearCarpetaBuild, 
+    y luego ejecutara lo que tiene dentro.
+    javac es la cosa de compilar
+    recibe una carpeta donde estan sus .java 
+    y una carpeta donde poner los compilados
+ <target name="compilar" depends="crearCarpetaBuild" includeantruntime="false"
+    classpathref="classpath">
+
+-->
