@@ -1,0 +1,45 @@
+<project name="ProjectoEnrique" default="run" basedir=".">
+    <!-- Vamos creando properties-->
+    <property name="src.dir" value="./src" />
+    <property name="build.dir" value="./build" />
+    <property name="lib.dir" value="./lib" />
+    <property name="dependencia.dir" value="${lib.dir}/server.jar" />
+    <property name="jar.dir" value=".	" />
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar" />
+        <pathelement location="${dependencia.dir}" />
+    </path>
+
+    <target name="crearCarpetaBuild">
+        <mkdir dir="${build.dir}" />
+    </target>
+
+
+    <target name="compilar" depends="crearCarpetaBuild">
+        <mkdir dir="${build.dir}" />
+        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath"
+            includeantruntime="false" />
+    </target>
+
+    <target name="JAR" depends="compilar">
+        <jar destfile="./cliente.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="cliente-Class" value="cliente.cliente" />
+            </manifest>
+            <fileset dir="${lib.dir}" includes="*.jar" />
+        </jar>
+    </target>
+
+    <target name="run" depends="JAR">
+        <java fork="true" classname="cliente.cliente">
+            <classpath>
+                <path refid="classpath" />
+                <path location="${jar.dir}" />                
+            </classpath>
+
+        </java>
+    </target>
+
+</project>
+

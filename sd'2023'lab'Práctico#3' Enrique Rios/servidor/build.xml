@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     22 ago 2023 11:18:12                                                        
+
+     Servidor
+                   
+     Enrique                                                                
+     ====================================================================== -->
+<project name="server" default="jar" basedir=".">
+
+	<description>
+		Servidor que probee funciones de
+		conectar, desconecatar, sumar 2 numeros y restar 2 numeros.
+
+	</description>
+	<property name="src.dir" value="src/servidor" />
+	<property name="build.dir" value="build" />
+	<property name="jar.dir" value="JAR" />
+	<property name="jar.name" value="server.jar" />
+	<property name="main.class" value="servidor.server" />
+	<property name="libCliente.dir" value="../cliente/lib"/>
+
+
+	<target name="limpiar">
+		<delete dir="${build.dir}" />
+		<delete dir="${jar.dir}" />
+
+	</target>
+
+	<target name="crearCarpetas">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${jar.dir}" />
+		<mkdir dir="${libCliente.dir}" />
+	</target>
+
+	<target name="compile" depends="limpiar , crearCarpetas">
+		
+		<javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" />
+	</target>
+
+	<target name="jar" depends="compile">
+
+		<jar destfile="${libCliente.dir}/${jar.name}" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>
