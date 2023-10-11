@@ -1,0 +1,134 @@
+<project name="MiProyecto" default="compilar-y-ejecutar"  basedir="." >
+    <!-- Definir propiedades para las interfaces -->
+    <property name="Isrc.dir" value="Interface_remota/src" />
+    <property name="Ibuild.dir" value="Interface_remota/build" />
+    <property name="Ijar.dir" value="Interface_remota/jar" />
+       
+    <!-- Compilar las interfaces -->
+    <target name="compilar-interfaces">
+        <mkdir dir="${Ibuild.dir}" />
+        <javac srcdir="${Isrc.dir}" destdir="${Ibuild.dir}" includeantruntime="false" source="8" target="8">
+        </javac>
+    </target>
+
+    <!-- Empaquetar las interfaces -->
+    <target name="empaquetar-interfaces" depends="compilar-interfaces">
+        <mkdir dir="${Ijar.dir}" />
+        <jar destfile="${Ijar.dir}/Interfaces.jar" basedir="${Ibuild.dir}">
+            <include name="**/*.class" />
+        </jar>
+    </target>
+	
+    <target name="interfaces" depends="empaquetar-interfaces" />
+
+	
+
+	 <!-- Aqui esta mi JAR de interfaces -->
+	    <path id="project.classpath">
+	        <fileset dir="${Ijar.dir}">
+	            <include name="Interfaces.jar" />
+	        </fileset>
+	    </path>
+	
+    <!--"ProyectoServer" -->
+    <property name="Ssrc.dir" value="ProyectoServer/src" />
+    <property name="Sbuild.dir" value="ProyectoServer/build" />
+    <property name="puerto" value="5592" />
+	
+	 <!--"start Registry" 
+
+	<target name="start-rmiregistry">
+	    <exec executable="rmiregistry">
+	        <arg value="${puerto}" />
+	        <spawn />
+	        <redirector inputstring=" " output="${basedir}/rmiregistry.log" error="${basedir}/rmiregistry.log" />
+	    </exec>
+	</target>
+	-->
+	
+	  <target name="start-rmiregistry">
+	        <!-- Ejecutar el script para iniciar rmiregistry -->
+	        <exec executable="cmd" os="Windows">
+	            <arg value="/C" />
+	            <arg value="start-rmiregistry.bat" />
+	        </exec>
+	    </target>
+	
+	
+	
+    <!-- Compilar la clase ChatServer.java -->
+    <target name="compile_server" depends="interfaces, start-rmiregistry">
+        <mkdir dir="${Sbuild.dir}" />
+        <javac srcdir="${Ssrc.dir}" destdir="${Sbuild.dir}" includeantruntime="false" source="8" target="8">
+            <!-- Agregar las clases de las interfaces al classpath -->
+            <classpath>
+                <fileset dir="${Ijar.dir}">
+                    <include name="Interfaces.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+ <target name="run_server" depends="compile_server">
+    <exec executable="cmd" spawn="true">
+        <arg value="/c" />
+        <arg value="start" />
+        <arg value="cmd.exe" />
+        <arg value="/c" />
+        <arg value="java -classpath ${Sbuild.dir};${Ijar.dir}/Interfaces.jar ChatServer ${puerto}" />
+    </exec>
+</target>
+	
+
+    
+
+	
+	
+	
+	
+	 <!-- "Proyecto_Cliente" -->
+	    <property name="Csrc.dir" value="ProyectoCliente/src" />
+	    <property name="Cbuild.dir" value="ProyectoCliente/build" />
+	    <property name="hostname" value="localhost" />
+	   
+	    
+	    <!-- Compila "Proyecto_Cliente" -->
+	    <target name="compile_cliente" depends="run_server">
+	        <mkdir dir="${Cbuild.dir}" />
+	        <javac srcdir="${Csrc.dir}" destdir="${Cbuild.dir}" includeantruntime="false" source="8" target="8">
+	            <classpath>
+	                <fileset dir="${Ijar.dir}">
+	                    <include name="Interfaces.jar" />
+	                </fileset>
+	                <path refid="project.classpath" />
+	            </classpath>
+	        </javac>
+	    </target>
+		
+	<target name="run-cliente" >
+		        <java fork="true" classname="ChatClient">
+		            <classpath>
+		                <path refid="project.classpath" />
+		                <pathelement path="${Cbuild.dir}" />
+		            </classpath>
+		            <arg value="${hostname}" />
+		            <arg value="${puerto}" />
+		        </java>
+		    </target>
+	
+
+    <!-- Ejecuta 3 veces el cliente." -->
+	<target name="start-clientes"  depends="compile_cliente">
+    <exec executable="cmd">
+        <arg value="/c" />
+        <arg value="start_clients.bat" />
+    </exec>
+</target>
+	
+	
+	<!-- Tarea predeterminada para compilar y ejecutar el servidor -->
+	    <target name="compilar-y-ejecutar" depends="start-clientes" />
+	
+	
+</project>
+

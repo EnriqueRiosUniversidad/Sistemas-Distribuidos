@@ -1,0 +1,29 @@
+<project name="MiProyecto" default="compilar-y-empaquetar" basedir=".">
+    <!-- Definir propiedades -->
+    <property name="Isrc.dir" value="src" />
+    <property name="Ibuild.dir" value="build" />
+    <property name="Ijar.dir" value="jar" />
+       
+    <!-- Compilar -->
+    <target name="compilar">
+        <mkdir dir="${Ibuild.dir}" />
+        <javac srcdir="${Isrc.dir}" destdir="${Ibuild.dir}" includeantruntime="false" source="8" target="8">
+           
+        </javac>
+    </target>
+
+    <!-- Empaquetar-->
+    <target name="empaquetar" depends="compilar">
+        <mkdir dir="${Ijar.dir}" />
+        <jar destfile="${Ijar.dir}/Interfaces.jar" basedir="${Ibuild.dir}">
+            <!-- Incluye archivos .class -->
+            <include name="**/*.class" />
+        </jar>
+    </target>
+
+    <!-- Tarea predeterminada -->
+    <target name="compilar-y-empaquetar" depends="compilar, empaquetar" />
+
+	
+	
+</project>
